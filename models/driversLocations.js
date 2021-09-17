@@ -5,7 +5,7 @@ const driverLocationsSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "Drivers",
   },
-  location: {
+  coordinate: {
     type: {
       type: String, // Don't do `{ location: { type: String } }`
       enum: ["Point"], // 'location.type' must be 'Point'

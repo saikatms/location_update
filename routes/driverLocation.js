@@ -1,21 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Driverlocation = mongoose.model("DriverLocations");
+const DriverLocation = mongoose.model("DriverLocations");
 
 //get nearby drivers
 router.get("/driverLocation", (req, res) => {
-  Driverlocation.ensureIndexes({ coordinate: "2dsphere" });
-  Driverlocation.find(
+  console.log(parseFloat(req.body.latitude));
+  DriverLocation.ensureIndexes({ coordinates: "2dsphere" });
+
+  DriverLocation.find(
     {
       coordinate: {
         $near: {
           $geometry: {
             type: "Point",
-            coordinates: [
-              parseFloat(req.query.longitude),
-              parseFloat(req.query.latitude),
-            ],
+            coordinates: [3.145909, 101.698545],
           },
           $maxDistance: 10000,
         },
@@ -23,6 +22,7 @@ router.get("/driverLocation", (req, res) => {
     },
     (err, location) => {
       if (err) {
+        // console.log(err);
         res.send(err);
       } else {
         res.send(location);
@@ -40,7 +40,7 @@ router.put("/driverLocationSocket/:id", (req, res) => {
       error: "Bad data",
     });
   } else {
-    DriverLocations.updateOne(
+    DriverLocation.updateOne(
       { _id: req.params.id },
       { $set: { socketId: req.body.socketId } },
       (err, updateDetails) => {
@@ -67,7 +67,7 @@ router.put("/driverLocation/:id", (req, res) => {
       error: "Bad Data",
     });
   } else {
-    Driverlocation.updateOne(
+    DriverLocation.updateOne(
       { _id: req.params.id },
       {
         $set: {
@@ -85,7 +85,7 @@ router.put("/driverLocation/:id", (req, res) => {
         }
         if (updateDetails) {
           //Get updated location
-          Driverlocation.findOne(
+          DriverLocation.findOne(
             {
               _id: req.params.id,
             },

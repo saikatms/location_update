@@ -30,11 +30,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 require("./models/drivers");
 require("./models/driversLocations");
+require("./models/bookings");
+require("./models/address");
 app.use(express.json());
 app.use(require("./routes/index"));
 
 app.use(require("./routes/drivers"));
 app.use(require("./routes/driverLocation"));
+app.use(require("./routes/bookings"));
 // app.listen(PORT, () => {
 //   console.log("Server is running on" + PORT);
 // });
